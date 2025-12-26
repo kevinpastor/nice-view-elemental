@@ -2,13 +2,13 @@ if(CONFIG_ZMK_DISPLAY AND CONFIG_NICE_VIEW_WIDGET_STATUS)
     zephyr_library_include_directories(${CMAKE_SOURCE_DIR}/include)
 
     zephyr_library_sources(
-        ./src/images/logo_0.c
+        ./src/images/logo_1.c
+        ./src/images/logo_2.c
+        ./src/images/logo_3.c
         ./src/images/logo_4.c
-        ./src/images/logo_8.c
-        ./src/images/logo_12.c
-        ./src/images/logo_16.c
-        ./src/images/logo_20.c
-        ./src/images/logo_24.c  
+        ./src/images/logo_5.c
+        ./src/images/logo_6.c
+        ./src/images/logo_7.c  
 
         ./src/fonts/press_start_2p_8.c
         ./src/fonts/press_start_2p_16.c
