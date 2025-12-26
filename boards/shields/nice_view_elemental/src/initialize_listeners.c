@@ -1,4 +1,4 @@
-#include "../../include/central/initialize_listeners.h"
+#include "../include/initialize_listeners.h"
 
 #include <limits.h>
 #include <lvgl.h>
@@ -13,29 +13,17 @@
 #include <zmk/events/battery_state_changed.h>
 #include <zmk/events/ble_active_profile_changed.h>
 #include <zmk/events/endpoint_changed.h>
+#include <zmk/events/keycode_state_changed.h>
 #include <zmk/events/layer_state_changed.h>
+#include <zmk/events/split_peripheral_status_changed.h>
 #include <zmk/events/usb_conn_state_changed.h>
 #include <zmk/keymap.h>
+#include <zmk/split/bluetooth/peripheral.h>
 #include <zmk/usb.h>
-#include "../../include/central/render.h"
+#include "../include/main.h"
+#include "../include/render.h"
 
-struct states states;
-
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
-static void background_update_timer(lv_timer_t* timer)
-{
-    states.background_index = (states.background_index + 1) % UINT_MAX;
-
-    render_main();
-}
-
-lv_timer_t * timer;
-
-static void start_timer() {
-    // Call the `background_update_timer` function every configured interval.
-    timer = lv_timer_create(background_update_timer, CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS, NULL);
-}
-
+// #if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
 // We want to pause the animation when the keyboard is idling.
 int activity_update_callback(const zmk_event_t* eh) {
     struct zmk_activity_state_changed* ev = as_zmk_activity_state_changed(eh);
@@ -45,12 +33,14 @@ int activity_update_callback(const zmk_event_t* eh) {
 
     switch (ev->state) {
         case ZMK_ACTIVITY_ACTIVE: {
-            lv_timer_resume(timer);
+            start_animation();
+            // lv_timer_resume(timer);
             break;
         }
         case ZMK_ACTIVITY_IDLE:
         case ZMK_ACTIVITY_SLEEP: {
-            lv_timer_pause(timer);
+            stop_animation();
+            // lv_timer_pause(timer);
             break;
         }
         default: {
@@ -74,7 +64,9 @@ ZMK_SUBSCRIPTION(
     activity_update,
     zmk_activity_state_changed
 );
-#endif
+// #endif
+
+struct states states;
 
 static void battery_state_update_callback(struct battery_state state) {
     states.battery = state;
@@ -129,6 +121,7 @@ static void connectivity_state_update_callback(struct connectivity_state state) 
 }
 
 static struct connectivity_state get_connectivity_state(const zmk_event_t* event) {
+#if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
     const struct zmk_endpoint_instance selected_endpoint = zmk_endpoints_selected();
     const int active_profile_index = zmk_ble_active_profile_index();
     const bool active_profile_connected = zmk_ble_active_profile_is_connected();
@@ -140,6 +133,13 @@ static struct connectivity_state get_connectivity_state(const zmk_event_t* event
         .active_profile_connected = active_profile_connected,
         .active_profile_bonded = active_profile_bonded,
     };
+#else
+    const bool connected = zmk_split_bt_peripheral_is_connected();
+
+    struct connectivity_state state = {
+        .connected = connected,
+    };
+#endif
 
     return state;
 }
@@ -154,6 +154,7 @@ ZMK_DISPLAY_WIDGET_LISTENER(
     get_connectivity_state
 )
 
+#if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
 // Subscribe the `widget_connectivity_state_update` listener to the
 // `zmk_endpoint_changed` event dispatched by ZMK.
 ZMK_SUBSCRIPTION(
@@ -176,7 +177,18 @@ ZMK_SUBSCRIPTION(
     // Triggered when the selected profile has changed.
     zmk_ble_active_profile_changed
 );
+#else
+// Subscribe the `widget_connectivity_state_update` listener to the
+// `zmk_split_peripheral_status_changed` event dispatched by ZMK.
+ZMK_SUBSCRIPTION(
+    widget_connectivity_state_update,
+    // Triggered when the peripheral was connected or disconnected from the
+    // central.
+    zmk_split_peripheral_status_changed
+);
+#endif
 
+#if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
 static void layer_state_update_callback(struct layer_state state) {
     states.layer = state;
 
@@ -214,12 +226,56 @@ ZMK_SUBSCRIPTION(
     zmk_layer_state_changed
 );
 
+static void modifiers_state_update_callback(struct modifiers_state state) {
+    states.modifiers = state;
+
+    render_modifiers();
+}
+
+// Retrieve the data we want from the event
+static struct modifiers_state get_modifiers_state(const zmk_event_t* event) {
+    const zmk_mod_flags_t modifiers = zmk_hid_get_explicit_mods();
+    const bool is_shift_active = modifiers & (MOD_LSFT | MOD_RSFT);
+    const bool is_ctrl_active = modifiers & (MOD_LCTL | MOD_RCTL);
+    const bool is_alt_active = modifiers & (MOD_LALT | MOD_RALT);
+    const bool is_gui_active = modifiers & (MOD_LGUI | MOD_RGUI);
+
+    struct modifiers_state state = {
+        .is_shift_active = is_shift_active,
+        .is_ctrl_active = is_ctrl_active,
+        .is_alt_active = is_alt_active,
+        .is_gui_active = is_gui_active,
+    };
+
+    return state;
+}
+
+// Create a listener named `widget_modifiers_state_update`. This name is then used
+// to create a subscription.
+ZMK_DISPLAY_WIDGET_LISTENER(
+    widget_modifiers_state_update,
+    struct modifiers_state,
+    // Called after `get_modifiers_state` with the value it returned.
+    modifiers_state_update_callback,
+    get_modifiers_state
+)
+
+// Subscribe the `widget_modifiers_state_update` listener to the
+// `zmk_keycode_state_changed` event dispatched by ZMK.
+ZMK_SUBSCRIPTION(
+    widget_modifiers_state_update,
+    zmk_keycode_state_changed
+);
+#endif
+
 void initialize_listeners() {
+#if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
     widget_layer_state_update_init();
+    widget_modifiers_state_update_init();
+#endif
     widget_connectivity_state_update_init();
     widget_battery_state_update_init();
 
-#if IS_ENABLED(CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION)
-    start_timer();
-#endif
+    initialize_animation();
+    start_animation();
 }

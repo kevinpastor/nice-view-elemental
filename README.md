@@ -45,10 +45,10 @@ manifest:
 ```diff
 ---
 include:
-  - board: nice_nano_v2
+  - board: nice_nano@2.0.0
 -   shield: corne_left nice_view_adapter nice_view
 +   shield: corne_left nice_view_adapter nice_view_elemental
-  - board: nice_nano_v2
+  - board: nice_nano@2.0.0
 -   shield: corne_right nice_view_adapter nice_view
 +   shield: corne_right nice_view_adapter nice_view_elemental
 ```
@@ -99,7 +99,6 @@ Displays the connectivity status for both the central and peripheral halves.
 | ----------------------------------------------- | ---- | ----------------------------------------------------------------------------------------------------------------- | ------- |
 | `CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION`          | bool | Enables the background animation.                                                                                 | y       |
 | `CONFIG_NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS` | int  | Frame delay for the animation, in milliseconds.                                                                   | 250     |
-| `CONFIG_NICE_VIEW_ELEMENTAL_BACKGROUND`         | bool | Displays a background.                                                                                            | y       |
 | `CONFIG_NICE_VIEW_ELEMENTAL_OUTLINE`            | bool | Displays an outline around the shadow of the layer name. The outline is the 1px white line around the layer name. | y       |
 | `CONFIG_NICE_VIEW_ELEMENTAL_SHADOW`             | bool | Displays a shadow around the layer name. The shadow is the 4px black line around the layer name.                  | y       |
 <!--

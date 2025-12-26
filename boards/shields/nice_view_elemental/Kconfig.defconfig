@@ -29,8 +29,9 @@ if SHIELD_NICE_VIEW_ELEMENTAL
     config NICE_VIEW_WIDGET_STATUS
         bool "Custom nice!view status widget"
         select LV_FONT_MONTSERRAT_16
-        select LV_USE_IMG
+        select LV_USE_IMAGE
         select LV_USE_CANVAS
+        select LV_USE_ANIMIMG
 
     config NICE_VIEW_ELEMENTAL_ANIMATION
         bool "Enables the background animation."
@@ -38,21 +39,17 @@ if SHIELD_NICE_VIEW_ELEMENTAL
 
     config NICE_VIEW_ELEMENTAL_ANIMATION_FRAME_MS
         int "Frame delay for the animation, in milliseconds."
-        default 250
+        default 150
 
     config NICE_VIEW_ELEMENTAL_CAPITALIZATION
         bool "Enables full capitalization for the layer name."
-        default y
-
-    config NICE_VIEW_ELEMENTAL_BACKGROUND
-        bool "Displays a background."
-        default y
+        default n
 
     config NICE_VIEW_ELEMENTAL_OUTLINE
         bool "Displays an outline around the shadow of the layer name."
-        default y
+        default n
 
     config NICE_VIEW_ELEMENTAL_SHADOW
         bool "Displays a shadow around the layer name."
-        default y
+        default n
 endif
