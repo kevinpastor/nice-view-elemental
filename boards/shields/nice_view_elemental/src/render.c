@@ -472,15 +472,15 @@ LV_IMG_DECLARE(logo_5);
 LV_IMG_DECLARE(logo_6);
 LV_IMG_DECLARE(logo_7);
 const lv_image_dsc_t* images[] = {
-    &grid,
-    &grid_inverse
-    // &logo_1,
-    // &logo_2,
-    // &logo_3,
-    // &logo_4,
-    // &logo_5,
-    // &logo_6,
-    // &logo_7
+    // &grid,
+    // &grid_inverse
+    &logo_1,
+    &logo_2,
+    &logo_3,
+    &logo_4,
+    &logo_5,
+    &logo_6,
+    &logo_7
 };
 
 static const unsigned int frame_count = sizeof(images) / sizeof(images[0]);
@@ -488,7 +488,7 @@ static const unsigned int frame_count = sizeof(images) / sizeof(images[0]);
 void initialize_animation() {
     lv_animimg_set_src(image_canvas, (const void**)images, frame_count);
     // 2. Set the time for the whole animation.
-    lv_animimg_set_duration(image_canvas, 200);
+    lv_animimg_set_duration(image_canvas, 700);
 }
 
 void start_animation() {
