@@ -48,8 +48,6 @@ lv_color_t modifiers_canvas_buffer[
 
 lv_obj_t* image_canvas;
 
-LV_IMG_DECLARE(grid);
-
 // ZMK calls this function directly in `app/src/display/main.c` of its source
 // code.
 lv_obj_t* zmk_display_status_screen() {

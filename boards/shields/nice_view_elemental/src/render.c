@@ -462,8 +462,6 @@ void render_modifiers() {
 #endif
 
 // 1. Insert images here.
-LV_IMG_DECLARE(grid);
-LV_IMG_DECLARE(grid_inverse);
 LV_IMG_DECLARE(logo_1);
 LV_IMG_DECLARE(logo_2);
 LV_IMG_DECLARE(logo_3);
@@ -471,17 +469,51 @@ LV_IMG_DECLARE(logo_4);
 LV_IMG_DECLARE(logo_5);
 LV_IMG_DECLARE(logo_6);
 LV_IMG_DECLARE(logo_7);
+LV_IMG_DECLARE(logo_8);
+LV_IMG_DECLARE(logo_9);
+LV_IMG_DECLARE(logo_10);
+LV_IMG_DECLARE(logo_11);
+LV_IMG_DECLARE(logo_12);
+LV_IMG_DECLARE(logo_13);
+LV_IMG_DECLARE(logo_14);
+LV_IMG_DECLARE(logo_15);
+LV_IMG_DECLARE(logo_16);
+LV_IMG_DECLARE(logo_17);
+LV_IMG_DECLARE(logo_18);
+LV_IMG_DECLARE(logo_19);
+LV_IMG_DECLARE(logo_20);
+LV_IMG_DECLARE(logo_21);
+LV_IMG_DECLARE(logo_22);
+LV_IMG_DECLARE(logo_23);
+LV_IMG_DECLARE(logo_24);
+LV_IMG_DECLARE(logo_25);
 
 const lv_image_dsc_t* images[] = {
-    // &grid,
-    // &grid_inverse
     &logo_1,
     &logo_2,
     &logo_3,
     &logo_4,
     &logo_5,
     &logo_6,
-    &logo_7
+    &logo_7,
+    &logo_8,
+    &logo_9,
+    &logo_10,
+    &logo_11,
+    &logo_12,
+    &logo_13,
+    &logo_14,
+    &logo_15,
+    &logo_16,
+    &logo_17,
+    &logo_18,
+    &logo_19,
+    &logo_20,
+    &logo_21,
+    &logo_22,
+    &logo_23,
+    &logo_24,
+    &logo_25
 };
 
 static const unsigned int frame_count = sizeof(images) / sizeof(images[0]);
