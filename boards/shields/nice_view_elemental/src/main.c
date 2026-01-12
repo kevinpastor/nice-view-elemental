@@ -49,6 +49,14 @@ lv_color_t modifiers_canvas_buffer[
 lv_obj_t* image_canvas;
 
 LV_IMG_DECLARE(grid);
+LV_IMG_DECLARE(grid_inverse);
+LV_IMG_DECLARE(logo_1);
+LV_IMG_DECLARE(logo_2);
+LV_IMG_DECLARE(logo_3);
+LV_IMG_DECLARE(logo_4);
+LV_IMG_DECLARE(logo_5);
+LV_IMG_DECLARE(logo_6);
+LV_IMG_DECLARE(logo_7);
 
 // ZMK calls this function directly in `app/src/display/main.c` of its source
 // code.
