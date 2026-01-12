@@ -472,7 +472,7 @@ LV_IMG_DECLARE(logo_5);
 LV_IMG_DECLARE(logo_6);
 LV_IMG_DECLARE(logo_7);
 const lv_image_dsc_t* images[] = {
-    // &grid,
+    &grid,
     // &grid_inverse
     &logo_1,
     &logo_2,
