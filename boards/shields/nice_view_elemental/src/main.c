@@ -147,7 +147,7 @@ lv_obj_t* zmk_display_status_screen() {
     image_canvas = lv_animimg_create(screen);
     lv_obj_align(
         image_canvas,
-        LV_ALIGN_CENTER,
+        LV_ALIGN_TOP_LEFT,
         0,
         0
     );
