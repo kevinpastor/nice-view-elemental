@@ -475,7 +475,7 @@ const lv_image_dsc_t* images[] = {
     // &grid,
     // &grid_inverse
     &logo_1,
-    // &logo_2,
+    &logo_2,
     // &logo_3,
     // &logo_4,
     // &logo_5,
