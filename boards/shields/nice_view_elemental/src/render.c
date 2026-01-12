@@ -471,16 +471,17 @@ LV_IMG_DECLARE(logo_4);
 LV_IMG_DECLARE(logo_5);
 LV_IMG_DECLARE(logo_6);
 LV_IMG_DECLARE(logo_7);
+
 const lv_image_dsc_t* images[] = {
-    &grid,
+    // &grid,
     // &grid_inverse
     &logo_1,
     &logo_2,
-    // &logo_3,
-    // &logo_4,
-    // &logo_5,
-    // &logo_6,
-    // &logo_7
+    &logo_3,
+    &logo_4,
+    &logo_5,
+    &logo_6,
+    &logo_7
 };
 
 static const unsigned int frame_count = sizeof(images) / sizeof(images[0]);
