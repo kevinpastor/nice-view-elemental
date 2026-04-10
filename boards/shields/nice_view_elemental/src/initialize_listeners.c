@@ -122,7 +122,7 @@ static void connectivity_state_update_callback(struct connectivity_state state) 
 
 static struct connectivity_state get_connectivity_state(const zmk_event_t* event) {
 #if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
-    const struct zmk_endpoint_instance selected_endpoint = zmk_endpoints_selected();
+    const struct zmk_endpoint_instance selected_endpoint = zmk_endpoint_get_selected();
     const int active_profile_index = zmk_ble_active_profile_index();
     const bool active_profile_connected = zmk_ble_active_profile_is_connected();
     const bool active_profile_bonded = !zmk_ble_active_profile_is_open();

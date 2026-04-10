@@ -56,6 +56,7 @@ lv_obj_t* zmk_display_status_screen() {
     // Setup the base screen.
     lv_obj_t* screen = lv_obj_create(NULL);
     lv_obj_set_size(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
+    lv_obj_set_style_bg_color(screen, BACKGROUND_COLOR, 0);
 
 #if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
     // Create the main canvas to be used in the `render_main` function.

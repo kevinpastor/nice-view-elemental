@@ -462,11 +462,33 @@ void render_modifiers() {
 #endif
 
 // 1. Insert images here.
-LV_IMG_DECLARE(grid);
-LV_IMG_DECLARE(grid_inverse);
+// LV_IMG_DECLARE(black);
+// LV_IMG_DECLARE(grid);
+// LV_IMG_DECLARE(grid_inverse);
+LV_IMG_DECLARE(frame_0001);
+LV_IMG_DECLARE(frame_0002);
+LV_IMG_DECLARE(frame_0003);
+LV_IMG_DECLARE(frame_0004);
+LV_IMG_DECLARE(frame_0005);
+LV_IMG_DECLARE(frame_0006);
+LV_IMG_DECLARE(frame_0007);
+LV_IMG_DECLARE(frame_0008);
+LV_IMG_DECLARE(frame_0009);
+LV_IMG_DECLARE(frame_0010);
 const lv_image_dsc_t* images[] = {
-    &grid,
+    // &black
+    // &grid,
     // &grid_inverse
+    &frame_0001,
+    &frame_0002,
+    &frame_0003,
+    &frame_0004,
+    &frame_0005,
+    &frame_0006,
+    &frame_0007,
+    &frame_0008,
+    &frame_0009,
+    &frame_0010
 };
 
 static const unsigned int frame_count = sizeof(images) / sizeof(images[0]);
@@ -474,7 +496,7 @@ static const unsigned int frame_count = sizeof(images) / sizeof(images[0]);
 void initialize_animation() {
     lv_animimg_set_src(image_canvas, (const void**)images, frame_count);
     // 2. Set the time for the whole animation.
-    lv_animimg_set_duration(image_canvas, 200);
+    lv_animimg_set_duration(image_canvas, 1000);
 }
 
 void start_animation() {
