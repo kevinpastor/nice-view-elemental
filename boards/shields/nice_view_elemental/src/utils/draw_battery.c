@@ -11,8 +11,8 @@ void draw_battery(lv_obj_t* canvas, lv_coord_t x, lv_coord_t y, struct battery_s
     draw_image(&battery, canvas, x, y);
 
     // Draw the main part of the battery
-    // const int width = 19 * (state.level / 100.0);
     // ! TODO Fix freezing issue when battery nearing 100%. 19 should be the max width, but from 17 on, the keyboard freezes.
+    // const int width = 19 * (state.level / 100.0);
     const int width = 16 * (state.level / 100.0);
     if (width > 0) {
         lv_layer_t layer;

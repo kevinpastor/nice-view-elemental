@@ -159,14 +159,12 @@ void rotate_connectivity_canvas() {
 
 #if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
 static void render_bluetooth_logo() {
-    if (states.connectivity.active_profile_bonded) {
-        if (states.connectivity.active_profile_connected) {
-            draw_image(&bluetooth_connected, connectivity_canvas, 16, 0);
-        } else {
-            draw_image(&bluetooth_disconnected, connectivity_canvas, 16, 0);
-        }
-    } else {
+    if (!states.connectivity.active_profile_bonded) {
         draw_image(&bluetooth_searching, connectivity_canvas, 16, 0);
+    } else if (!states.connectivity.active_profile_connected) {
+        draw_image(&bluetooth_disconnected, connectivity_canvas, 16, 0);
+    } else {
+        draw_image(&bluetooth_connected, connectivity_canvas, 16, 0);
     }
 }
 
@@ -214,15 +212,25 @@ static void render_bluetooth_connectivity() {
 
 void render_connectivity() {
     lv_canvas_fill_bg(connectivity_canvas, BACKGROUND_COLOR, LV_OPA_TRANSP);
-
+    
 #if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
-    switch (states.connectivity.selected_endpoint.transport) {
+    enum zmk_transport transport = states.connectivity.selected_endpoint.transport == ZMK_TRANSPORT_NONE
+        // The value returned by `zmk_endpoint_get_preferred_transport()` is used in the default display module by ZMK.
+        // However, this isn't right since it only tells which output should be priorizes when both are connected.
+        // Here, we want to show which Bluetooth profile we're trying to connect to when we are not connected via USB.
+        ? ZMK_TRANSPORT_BLE
+        : states.connectivity.selected_endpoint.transport;
+    switch (transport) {
         case ZMK_TRANSPORT_BLE: {
             render_bluetooth_connectivity();
             break;
         }
         case ZMK_TRANSPORT_USB: {
             draw_image(&usb, connectivity_canvas, 7, 4);
+            break;
+        }
+        case ZMK_TRANSPORT_NONE: {
+            // No transport, so we can just show nothing.
             break;
         }
     }
