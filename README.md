@@ -45,10 +45,10 @@ manifest:
 ```diff
 ---
 include:
-  - board: nice_nano_v2
+  - board: nice_nano@2.0.0
 -   shield: corne_left nice_view_adapter nice_view
 +   shield: corne_left nice_view_adapter nice_view_elemental
-  - board: nice_nano_v2
+  - board: nice_nano@2.0.0
 -   shield: corne_right nice_view_adapter nice_view
 +   shield: corne_right nice_view_adapter nice_view_elemental
 ```

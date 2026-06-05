@@ -8,52 +8,55 @@
 
 lv_obj_t* battery_canvas;
 lv_color_t battery_canvas_buffer[
-    LV_CANVAS_BUF_SIZE_TRUE_COLOR(
+    LV_CANVAS_BUF_SIZE(
         BATTERY_CANVAS_WIDTH,
-        BATTERY_CANVAS_HEIGHT
+        BATTERY_CANVAS_HEIGHT,
+        LV_COLOR_FORMAT_GET_BPP(COLOR_FORMAT),
+        LV_DRAW_BUF_STRIDE(BATTERY_CANVAS_WIDTH, COLOR_FORMAT)
     )
 ];
 
 lv_obj_t* connectivity_canvas;
 lv_color_t connectivity_canvas_buffer[
-    LV_CANVAS_BUF_SIZE_TRUE_COLOR(
+    LV_CANVAS_BUF_SIZE(
         CONNECTIVITY_CANVAS_WIDTH,
-        CONNECTIVITY_CANVAS_HEIGHT
+        CONNECTIVITY_CANVAS_HEIGHT,
+        LV_COLOR_FORMAT_GET_BPP(COLOR_FORMAT),
+        LV_DRAW_BUF_STRIDE(CONNECTIVITY_CANVAS_WIDTH, COLOR_FORMAT)
     )
 ];
 
 lv_obj_t* layer_canvas;
 lv_color_t layer_canvas_buffer[
-    LV_CANVAS_BUF_SIZE_TRUE_COLOR(
+    LV_CANVAS_BUF_SIZE(
         LAYER_CANVAS_WIDTH,
-        LAYER_CANVAS_HEIGHT
+        LAYER_CANVAS_HEIGHT,
+        LV_COLOR_FORMAT_GET_BPP(COLOR_FORMAT),
+        LV_DRAW_BUF_STRIDE(LAYER_CANVAS_WIDTH, COLOR_FORMAT)
     )
 ];
 
 lv_obj_t* modifiers_canvas;
 lv_color_t modifiers_canvas_buffer[
-    LV_CANVAS_BUF_SIZE_TRUE_COLOR(
+    LV_CANVAS_BUF_SIZE(
         MODIFIERS_CANVAS_WIDTH,
-        MODIFIERS_CANVAS_HEIGHT
+        MODIFIERS_CANVAS_HEIGHT,
+        LV_COLOR_FORMAT_GET_BPP(COLOR_FORMAT),
+        LV_DRAW_BUF_STRIDE(MODIFIERS_CANVAS_WIDTH, COLOR_FORMAT)
     )
 ];
 
-#if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
 lv_obj_t* image_canvas;
-lv_color_t image_canvas_buffer[
-    LV_CANVAS_BUF_SIZE_TRUE_COLOR(
-        IMAGE_CANVAS_WIDTH,
-        IMAGE_CANVAS_HEIGHT
-    )
-];
-#endif
+
+LV_IMG_DECLARE(grid);
 
 // ZMK calls this function directly in `app/src/display/main.c` of its source
 // code.
 lv_obj_t* zmk_display_status_screen() {
     // Setup the base screen.
     lv_obj_t* screen = lv_obj_create(NULL);
-    lv_obj_set_size(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
+    lv_obj_set_size(screen, CONFIG_NICE_VIEW_ELEMENTAL_DISPLAY_WIDTH, CONFIG_NICE_VIEW_ELEMENTAL_DISPLAY_HEIGHT);
+    lv_obj_set_style_bg_color(screen, BACKGROUND_COLOR, 0);
 
 #if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
     // Create the main canvas to be used in the `render_main` function.
@@ -63,14 +66,14 @@ lv_obj_t* zmk_display_status_screen() {
         LV_ALIGN_TOP_LEFT,
         PADDING,
         // `ceil` is used to tend towards the bottom of the screen.
-        PADDING + ceil((SCREEN_HEIGHT - LAYER_CANVAS_HEIGHT - STATUS_HEIGHT) / 2)
+        PADDING + ceil((CONFIG_NICE_VIEW_ELEMENTAL_DISPLAY_HEIGHT - LAYER_CANVAS_HEIGHT - STATUS_HEIGHT) / 2)
     );
     lv_canvas_set_buffer(
         layer_canvas,
         layer_canvas_buffer,
         LAYER_CANVAS_WIDTH,
         LAYER_CANVAS_HEIGHT,
-        LV_IMG_CF_TRUE_COLOR
+        COLOR_FORMAT
     );
 
     modifiers_canvas = lv_canvas_create(screen);
@@ -78,14 +81,14 @@ lv_obj_t* zmk_display_status_screen() {
         modifiers_canvas,
         LV_ALIGN_BOTTOM_MID,
         0,
-        -4
+        -3
     );
     lv_canvas_set_buffer(
         modifiers_canvas,
         modifiers_canvas_buffer,
         MODIFIERS_CANVAS_WIDTH,
         MODIFIERS_CANVAS_HEIGHT,
-        LV_IMG_CF_TRUE_COLOR
+        COLOR_FORMAT
     );
 #endif
 
@@ -95,12 +98,12 @@ lv_obj_t* zmk_display_status_screen() {
         battery_canvas,
 #if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
         LV_ALIGN_TOP_RIGHT,
-        -PADDING,
-        PADDING + 3
+        -PADDING + 1, // 1: outline
+        PADDING + 3 - 1 // 1: outline
 #else
         LV_ALIGN_BOTTOM_LEFT,
-        PADDING,
-        -PADDING - 3
+        PADDING - 1, // 1: outline
+        -PADDING - 3 + 1 // 1: outline
 #endif
     );
     lv_canvas_set_buffer(
@@ -108,9 +111,9 @@ lv_obj_t* zmk_display_status_screen() {
         battery_canvas_buffer,
         BATTERY_CANVAS_WIDTH,
         BATTERY_CANVAS_HEIGHT,
-        LV_IMG_CF_TRUE_COLOR
+        COLOR_FORMAT
     );
-    
+
     // Create the info canvas to be used in the `render_connectivity` function.
     connectivity_canvas = lv_canvas_create(screen);
     lv_obj_align(
@@ -121,8 +124,8 @@ lv_obj_t* zmk_display_status_screen() {
         PADDING
 #else
         LV_ALIGN_BOTTOM_RIGHT,
-        -PADDING,
-        -PADDING
+        -PADDING + 1, // 1: outline
+        -PADDING + 1  // 1: outline
 #endif
     );
     lv_canvas_set_buffer(
@@ -130,20 +133,22 @@ lv_obj_t* zmk_display_status_screen() {
         connectivity_canvas_buffer,
         CONNECTIVITY_CANVAS_WIDTH,
         CONNECTIVITY_CANVAS_HEIGHT,
-        LV_IMG_CF_TRUE_COLOR
+        COLOR_FORMAT
     );
-    
-#if (defined(CONFIG_ZMK_SPLIT) && !defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
+
     // Create the info canvas to be used in the `render_image` function.
     image_canvas = lv_animimg_create(screen);
     lv_obj_align(
         image_canvas,
-        LV_ALIGN_CENTER,
+        LV_ALIGN_TOP_LEFT,
         0,
         0
     );
-#endif
-    
+
+    lv_obj_move_to_index(image_canvas, 0);
+    lv_obj_move_to_index(battery_canvas, 1);
+    lv_obj_move_to_index(connectivity_canvas, 1);
+
     // Depending on which half the build is for, the implementation will differ.
     initialize_listeners();
 

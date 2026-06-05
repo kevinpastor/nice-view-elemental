@@ -29,7 +29,7 @@ if SHIELD_NICE_VIEW_ELEMENTAL
     config NICE_VIEW_WIDGET_STATUS
         bool "Custom nice!view status widget"
         select LV_FONT_MONTSERRAT_16
-        select LV_USE_IMG
+        select LV_USE_IMAGE
         select LV_USE_CANVAS
         select LV_USE_ANIMIMG
 
@@ -45,11 +45,11 @@ if SHIELD_NICE_VIEW_ELEMENTAL
         bool "Enables full capitalization for the layer name."
         default n
 
-    config NICE_VIEW_ELEMENTAL_OUTLINE
-        bool "Displays an outline around the shadow of the layer name."
-        default n
+    config NICE_VIEW_ELEMENTAL_DISPLAY_WIDTH
+        int "Display resolution width, in pixels."
+        default 160
 
-    config NICE_VIEW_ELEMENTAL_SHADOW
-        bool "Displays a shadow around the layer name."
-        default n
+    config NICE_VIEW_ELEMENTAL_DISPLAY_HEIGHT
+        int "Display resolution height, in pixels."
+        default 68
 endif
