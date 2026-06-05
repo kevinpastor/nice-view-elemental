@@ -101,7 +101,7 @@ void rotate_battery_canvas() {
             BATTERY_CANVAS_WIDTH,
             BATTERY_CANVAS_HEIGHT,
             LV_COLOR_FORMAT_GET_BPP(LV_COLOR_FORMAT_ARGB8888),
-            LV_DRAW_BUF_STRIDE_ALIGN
+            LV_DRAW_BUF_STRIDE(BATTERY_CANVAS_WIDTH, LV_COLOR_FORMAT_ARGB8888)
         )
     ];
     memcpy(tmp_buffer, battery_canvas_buffer, sizeof(tmp_buffer));
@@ -135,7 +135,7 @@ void rotate_connectivity_canvas() {
             CONNECTIVITY_CANVAS_WIDTH,
             CONNECTIVITY_CANVAS_HEIGHT,
             LV_COLOR_FORMAT_GET_BPP(COLOR_FORMAT),
-            LV_DRAW_BUF_STRIDE_ALIGN
+            LV_DRAW_BUF_STRIDE(CONNECTIVITY_CANVAS_WIDTH, COLOR_FORMAT)
         )
     ];
     memcpy(tmp_buffer, connectivity_canvas_buffer, sizeof(tmp_buffer));
