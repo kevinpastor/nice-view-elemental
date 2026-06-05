@@ -55,7 +55,7 @@ LV_IMG_DECLARE(grid);
 lv_obj_t* zmk_display_status_screen() {
     // Setup the base screen.
     lv_obj_t* screen = lv_obj_create(NULL);
-    lv_obj_set_size(screen, SCREEN_WIDTH, SCREEN_HEIGHT);
+    lv_obj_set_size(screen, CONFIG_NICE_VIEW_ELEMENTAL_DISPLAY_WIDTH, CONFIG_NICE_VIEW_ELEMENTAL_DISPLAY_HEIGHT);
     lv_obj_set_style_bg_color(screen, BACKGROUND_COLOR, 0);
 
 #if (defined(CONFIG_ZMK_SPLIT) && defined(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
@@ -66,7 +66,7 @@ lv_obj_t* zmk_display_status_screen() {
         LV_ALIGN_TOP_LEFT,
         PADDING,
         // `ceil` is used to tend towards the bottom of the screen.
-        PADDING + ceil((SCREEN_HEIGHT - LAYER_CANVAS_HEIGHT - STATUS_HEIGHT) / 2)
+        PADDING + ceil((CONFIG_NICE_VIEW_ELEMENTAL_DISPLAY_HEIGHT - LAYER_CANVAS_HEIGHT - STATUS_HEIGHT) / 2)
     );
     lv_canvas_set_buffer(
         layer_canvas,

@@ -4,9 +4,6 @@
 
 #include <lvgl.h>
 
-#define SCREEN_WIDTH 160
-#define SCREEN_HEIGHT 68
-
 #define COLOR_FORMAT LV_COLOR_FORMAT_ARGB8888
 
 #define PADDING 2
@@ -33,7 +30,7 @@
 #define MODIFIER_PADDING_Y 3
 #define MODIFIERS_CANVAS_HEIGHT 15
 
-#define LAYER_CANVAS_WIDTH (SCREEN_WIDTH - 2 * PADDING)
+#define LAYER_CANVAS_WIDTH (CONFIG_NICE_VIEW_ELEMENTAL_DISPLAY_WIDTH - 2 * PADDING)
 // This seemingly magic number comes from the font line height used, but the
 // variable cannot be used since it is not a static constant.
 #define LAYER_CANVAS_HEIGHT 26

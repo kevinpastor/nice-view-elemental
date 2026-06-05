@@ -52,4 +52,12 @@ if SHIELD_NICE_VIEW_ELEMENTAL
     config NICE_VIEW_ELEMENTAL_SHADOW
         bool "Displays a shadow around the layer name."
         default n
+
+    config NICE_VIEW_ELEMENTAL_DISPLAY_WIDTH
+        int "Display resolution width, in pixels."
+        default 160
+
+    config NICE_VIEW_ELEMENTAL_DISPLAY_HEIGHT
+        int "Display resolution height, in pixels."
+        default 68
 endif
